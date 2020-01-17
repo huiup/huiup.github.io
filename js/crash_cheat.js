@@ -3,15 +3,16 @@
  var titleTime;
  document.addEventListener('visibilitychange', function () {
      if (document.hidden) {
-         $('[rel="icon"]').attr('href', "/img/TEP.ico");
+         $('[rel="icon"]').attr('href', "https://img2018.cnblogs.com/blog/1380444/201905/1380444-20190526135051685-368111498.jpg");
          document.title = '╭(°A°`)╮ 页面崩溃啦 ~';
          clearTimeout(titleTime);
      }
      else {
-         $('[rel="icon"]').attr('href', "/favicon.ico");
+         $('[rel="icon"]').attr('href', "/images/failure.ico");
          document.title = '(ฅ>ω<*ฅ) 噫又好了~' + OriginTitle;
          titleTime = setTimeout(function () {
              document.title = OriginTitle;
          }, 2000);
      }
  });
+}
