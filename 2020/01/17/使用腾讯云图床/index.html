@@ -14,7 +14,7 @@
 
 
 <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
-  <link rel="stylesheet" href="/lib/pace/pace-theme-loading-bar.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-center-circle.min.css">
   <script src="/lib/pace/pace.min.js"></script>
 
 
@@ -28,7 +28,7 @@
     exturl: false,
     sidebar: {"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},
     copycode: {"enable":true,"show_result":true,"style":"flat"},
-    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    back2top: {"enable":true,"sidebar":true,"scrollpercent":true},
     bookmark: {"enable":false,"color":"#222","save":"auto"},
     fancybox: false,
     mediumzoom: false,
@@ -43,7 +43,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
   };
 </script>
@@ -183,10 +183,7 @@
     </header>
 
     
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
+  <div class="reading-progress-bar"></div>
 
 
     <main class="main">
@@ -374,6 +371,10 @@
 
 
       </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
 
     </div>
   </aside>
@@ -465,4 +466,5 @@
 </body>
 </html>
 <script type="text/javascript" src="/js/clicklove.js"></script>
+<script type="text/javascript" src="/js/linkcard.js"></script>
 <script type="text/javascript" src="/js/crash_cheat.js"></script>
