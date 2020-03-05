@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/animals_horse_32%C3%9732.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/animals_horse_16%C3%9716.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-center-circle.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://huihuiya.xyz').hostname,
+    root: '/',
+    scheme: 'Mist',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"flat"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="python中的装饰器点我查看更详细讲解   装饰器模式：允许向一个现有的对象添加新的功能，同时又不改变其结构。如下例，添加运行函数时打印运行时间的功能： 普通思路123456789import timedef f1():    print(&#39;this is a function&#39;)def print_time(func):    print(time.time())    func()print">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python装饰器与*args(**args)">
+<meta property="og:url" content="http://huihuiya.xyz/2020/03/06/python%E8%A3%85%E9%A5%B0%E5%99%A8%E4%B8%8E-args-args/index.html">
+<meta property="og:site_name" content="浪天海角">
+<meta property="og:description" content="python中的装饰器点我查看更详细讲解   装饰器模式：允许向一个现有的对象添加新的功能，同时又不改变其结构。如下例，添加运行函数时打印运行时间的功能： 普通思路123456789import timedef f1():    print(&#39;this is a function&#39;)def print_time(func):    print(time.time())    func()print">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-05T17:26:45.000Z">
+<meta property="article:modified_time" content="2020-03-05T17:33:39.072Z">
+<meta property="article:author" content="HuiYa">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="装饰器">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://huihuiya.xyz/2020/03/06/python%E8%A3%85%E9%A5%B0%E5%99%A8%E4%B8%8E-args-args/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>python装饰器与*args(**args) | 浪天海角</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">浪天海角</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">学习中···</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://huihuiya.xyz/2020/03/06/python%E8%A3%85%E9%A5%B0%E5%99%A8%E4%B8%8E-args-args/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="Author">
+      <meta itemprop="description" content="笔记总结！！！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="浪天海角">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          python装饰器与*args(**args)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-06 01:26:45 / 修改时间：01:33:39" itemprop="dateCreated datePublished" datetime="2020-03-06T01:26:45+08:00">2020-03-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>3 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="python中的装饰器"><a href="#python中的装饰器" class="headerlink" title="python中的装饰器"></a>python中的装饰器</h3><p><a href="https://www.runoob.com/w3cnote/python-func-decorators.html" target="_blank" rel="noopener">点我查看更详细讲解</a>  </p>
+<p><strong>装饰器模式：允许向一个现有的对象添加新的功能，同时又不改变其结构。</strong><br>如下例，添加运行函数时打印运行时间的功能：</p>
+<h4 id="普通思路"><a href="#普通思路" class="headerlink" title="普通思路"></a>普通思路</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'this is a function'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_time</span><span class="params">(func)</span>:</span></span><br><span class="line">    print(time.time())</span><br><span class="line">    func()</span><br><span class="line">print_time(f1)</span><br><span class="line"><span class="comment"># 1583410010.517994</span></span><br><span class="line"><span class="comment"># this is a function</span></span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+
+<p>然并卵的方法TAT</p>
+<h4 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">()</span>:</span></span><br><span class="line">        print(time.time())</span><br><span class="line">        func()</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'this is a function'</span>)</span><br><span class="line">f = decorator(f1)</span><br><span class="line">f()</span><br><span class="line"><span class="comment"># 1583410057.3736682</span></span><br><span class="line"><span class="comment"># this is a function</span></span><br></pre></td></tr></table></figure>
+<h4 id="使用语法糖"><a href="#使用语法糖" class="headerlink" title="使用语法糖"></a>使用语法糖</h4><p>语法糖——使原本苦涩的代码结构变得甜蜜起来（嘤嘤嘤）但并不能提高性能</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">()</span>:</span></span><br><span class="line">        print(time.time())</span><br><span class="line">        func()</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"><span class="meta">@decorator#语法糖</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'this is a function'</span>)</span><br><span class="line">f1()</span><br><span class="line"><span class="comment"># 1583410662.1807716</span></span><br><span class="line"><span class="comment"># this is a function</span></span><br></pre></td></tr></table></figure>
+<h4 id="带参函数的装饰器"><a href="#带参函数的装饰器" class="headerlink" title="带参函数的装饰器"></a>带参函数的装饰器</h4><h5 id="带一个参数的函数"><a href="#带一个参数的函数" class="headerlink" title="带一个参数的函数"></a>带一个参数的函数</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(func_name)</span>:</span></span><br><span class="line">        print(time.time())</span><br><span class="line">        func(func_name)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"><span class="meta">@decorator</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">(func_name)</span>:</span></span><br><span class="line">    print(<span class="string">'this is a function named '</span> + func_name)</span><br><span class="line">f1(<span class="string">'f1'</span>)</span><br><span class="line"><span class="comment"># 1583412433.7412617</span></span><br><span class="line"><span class="comment"># this is a function named f1</span></span><br></pre></td></tr></table></figure>
+<h5 id="带未知个参数的函数"><a href="#带未知个参数的函数" class="headerlink" title="带未知个参数的函数"></a>带未知个参数的函数</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="comment"># *args 可变参数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args)</span>:</span></span><br><span class="line">        print(time.time())</span><br><span class="line">        func(*args)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"><span class="meta">@decorator</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">(func_name)</span>:</span></span><br><span class="line">    print(<span class="string">'this is a function named '</span> + func_name)</span><br><span class="line"><span class="meta">@decorator</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f2</span><span class="params">(func_name1, func_name2)</span>:</span></span><br><span class="line">    print(<span class="string">'this is a function named '</span> + func_name1)</span><br><span class="line">    print(<span class="string">'this is a function named '</span> + func_name2)</span><br><span class="line">f1(<span class="string">'test func'</span>)</span><br><span class="line">f2(<span class="string">'test func1'</span>,<span class="string">'test func2'</span>)</span><br><span class="line"><span class="comment"># 1583412906.5692015</span></span><br><span class="line"><span class="comment"># this is a function named test func</span></span><br><span class="line"><span class="comment"># 1583412906.5701988</span></span><br><span class="line"><span class="comment"># this is a function named test func1</span></span><br><span class="line"><span class="comment"># this is a function named test func2</span></span><br></pre></td></tr></table></figure>
+<h5 id="带有未知个关键字参数的函数"><a href="#带有未知个关键字参数的函数" class="headerlink" title="带有未知个关键字参数的函数"></a>带有未知个关键字参数的函数</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="comment"># **kwargs 关键字参数</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        print(time.time())</span><br><span class="line">        func(*args, **kwargs)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"><span class="meta">@decorator</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">(func_name)</span>:</span></span><br><span class="line">    print(<span class="string">'this is a function named '</span> + func_name)</span><br><span class="line"><span class="meta">@decorator</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f2</span><span class="params">(func_name1, func_name2)</span>:</span></span><br><span class="line">    print(<span class="string">'this is a function named '</span> + func_name1)</span><br><span class="line">    print(<span class="string">'this is a function named '</span> + func_name2)</span><br><span class="line"><span class="meta">@decorator</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f3</span><span class="params">(func_name1, func_name2, **kw)</span>:</span></span><br><span class="line">    print(<span class="string">'this is a function named '</span> + func_name1)</span><br><span class="line">    print(<span class="string">'this is a function named '</span> + func_name2)</span><br><span class="line">    print(kw)</span><br><span class="line">f1(<span class="string">'test func'</span>)</span><br><span class="line">f2(<span class="string">'test func1'</span>,<span class="string">'test func2'</span>)</span><br><span class="line">f3(<span class="string">'test func1'</span>,<span class="string">'test func2'</span>, a=<span class="number">1</span>, b=<span class="number">2</span>, c=<span class="string">'123'</span>)</span><br><span class="line"><span class="comment"># 1583413790.4759157</span></span><br><span class="line"><span class="comment"># this is a function named test func</span></span><br><span class="line"><span class="comment"># 1583413790.4759157</span></span><br><span class="line"><span class="comment"># this is a function named test func1</span></span><br><span class="line"><span class="comment"># this is a function named test func2</span></span><br><span class="line"><span class="comment"># 1583413790.4769275</span></span><br><span class="line"><span class="comment"># this is a function named test func1</span></span><br><span class="line"><span class="comment"># this is a function named test func2</span></span><br><span class="line"><span class="comment"># &#123;'a': 1, 'b': 2, 'c': '123'&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong><em>注：关键字参数会以字典的形式打印出</em></strong></p>
+<h3 id="扩展-args与-args"><a href="#扩展-args与-args" class="headerlink" title="扩展(args与*args)"></a>扩展(<em>args与*</em>args)</h3><h4 id="args（可变位置参数）的用法"><a href="#args（可变位置参数）的用法" class="headerlink" title="*args（可变位置参数）的用法"></a>*args（可变位置参数）的用法</h4><p>当传入的参数个数未知，且不需要知道参数名称时。  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func_arg</span><span class="params">(args1, *args)</span>:</span></span><br><span class="line">    print(<span class="string">"args1:"</span>, args1)</span><br><span class="line">    <span class="keyword">for</span> arg <span class="keyword">in</span> args:</span><br><span class="line">        print(<span class="string">"another arg:"</span>, arg)</span><br><span class="line">func_arg(<span class="string">'zhang'</span>,<span class="string">'666'</span>,<span class="string">"淦"</span>,<span class="string">'火之高兴'</span>,<span class="string">'霜之哀伤'</span>,<span class="number">666</span>)</span><br><span class="line"><span class="comment"># args1: zhang</span></span><br><span class="line"><span class="comment"># another arg: 666</span></span><br><span class="line"><span class="comment"># another arg: 淦</span></span><br><span class="line"><span class="comment"># another arg: 火之高兴</span></span><br><span class="line"><span class="comment"># another arg: 霜之哀伤</span></span><br><span class="line"><span class="comment"># another arg: 666</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="args（可变关键字参数）的用法"><a href="#args（可变关键字参数）的用法" class="headerlink" title="**args（可变关键字参数）的用法"></a>**args（可变关键字参数）的用法</h4><p>当传入的参数个数未知，但需要知道参数的名称时  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func_kwargs</span><span class="params">(args1, **kwargs)</span>:</span></span><br><span class="line">    print(<span class="string">"args1:"</span>, args1)</span><br><span class="line">    <span class="keyword">for</span> key <span class="keyword">in</span> kwargs:</span><br><span class="line">        print(<span class="string">"keyword arg: %s : %s"</span> % (key, kwargs[key]))</span><br><span class="line">func_kwargs(<span class="number">9527</span> ,birth=<span class="number">1997</span>, name=<span class="string">'zhang'</span>,请回答<span class="number">1988</span> = <span class="string">'闭嘴吧1997'</span>)</span><br><span class="line"><span class="comment"># args1: 9527</span></span><br><span class="line"><span class="comment"># keyword arg: birth : 1997</span></span><br><span class="line"><span class="comment"># keyword arg: name : zhang</span></span><br><span class="line"><span class="comment"># keyword arg: 请回答1988 : 闭嘴吧1997</span></span><br></pre></td></tr></table></figure>
+<p>传入的参数以键值对的形式存放到字典里。</p>
+<h4 id="扩展（利用-args将参数转换为字典）"><a href="#扩展（利用-args将参数转换为字典）" class="headerlink" title="扩展（利用**args将参数转换为字典）"></a>扩展（利用**args将参数转换为字典）</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">kw_dict</span><span class="params">(**kwargs)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> kwargs</span><br><span class="line">print(kw_dict(a=<span class="number">1</span>,b=<span class="number">2</span>,c=<span class="number">3</span>))</span><br><span class="line"><span class="comment"># &#123;'a': 1, 'b': 2, 'c': 3&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="OVER"><a href="#OVER" class="headerlink" title="OVER"></a>OVER</h3>
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\03\03\python中json的基本用法\" rel="bookmark">python中json的基本用法</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\03\03\python中的正则表达式\" rel="bookmark">python中的正则表达式</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\03\06\匿名函数与map-reduce\" rel="bookmark">匿名函数与map/reduce</a></div>
+    </li>
+  </ul>
+
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/%E8%A3%85%E9%A5%B0%E5%99%A8/" rel="tag"># 装饰器</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/03/python%E4%B8%AD%E7%9A%84%E6%9E%9A%E4%B8%BE/" rel="prev" title="python中的枚举">
+      <i class="fa fa-chevron-left"></i> python中的枚举
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/06/%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0%E4%B8%8Emap-reduce/" rel="next" title="匿名函数与map/reduce">
+      匿名函数与map/reduce <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#python中的装饰器"><span class="nav-number">1.</span> <span class="nav-text">python中的装饰器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#普通思路"><span class="nav-number">1.1.</span> <span class="nav-text">普通思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#装饰器"><span class="nav-number">1.2.</span> <span class="nav-text">装饰器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用语法糖"><span class="nav-number">1.3.</span> <span class="nav-text">使用语法糖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#带参函数的装饰器"><span class="nav-number">1.4.</span> <span class="nav-text">带参函数的装饰器</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#带一个参数的函数"><span class="nav-number">1.4.1.</span> <span class="nav-text">带一个参数的函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#带未知个参数的函数"><span class="nav-number">1.4.2.</span> <span class="nav-text">带未知个参数的函数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#带有未知个关键字参数的函数"><span class="nav-number">1.4.3.</span> <span class="nav-text">带有未知个关键字参数的函数</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展-args与-args"><span class="nav-number">2.</span> <span class="nav-text">扩展(args与*args)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#args（可变位置参数）的用法"><span class="nav-number">2.1.</span> <span class="nav-text">*args（可变位置参数）的用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#args（可变关键字参数）的用法"><span class="nav-number">2.2.</span> <span class="nav-text">**args（可变关键字参数）的用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展（利用-args将参数转换为字典）"><span class="nav-number">2.3.</span> <span class="nav-text">扩展（利用**args将参数转换为字典）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#OVER"><span class="nav-number">3.</span> <span class="nav-text">OVER</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Author"
+      src="/images/header.jpg">
+  <p class="site-author-name" itemprop="name">Author</p>
+  <div class="site-description" itemprop="description">笔记总结！！！</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+  <div class="beian"><a href="http://www.beian.miit.gov.cn/" rel="noopener" target="_blank">黔ICP备20000648号-1 </a>
+      <img src="/images/beian.png" style="display: inline-block;">
+  </div>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Author</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">10k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">9 分钟</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
+<script type="text/javascript" src="/js/clicklove.js"></script>
+<script type="text/javascript" src="/js/linkcard.js"></script>
+<script type="text/javascript" src="/js/crash_cheat.js"></script>
