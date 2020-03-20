@@ -231,7 +231,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-03-20 14:15:02 / 修改时间：20:30:12" itemprop="dateCreated datePublished" datetime="2020-03-20T14:15:02+08:00">2020-03-20</time>
+              <time title="创建时间：2020-03-20 14:15:02 / 修改时间：20:33:40" itemprop="dateCreated datePublished" datetime="2020-03-20T14:15:02+08:00">2020-03-20</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -272,146 +272,22 @@
       
           <h3 id="1-操作文件的套路"><a href="#1-操作文件的套路" class="headerlink" title="1. 操作文件的套路"></a>1. 操作文件的套路</h3><p>在计算机中，操作文件一般包括<strong>三个步骤</strong>：</p>
 <ol>
-<li><p>打开文件</p>
-</li>
-<li><p>读、写文件</p>
-<ul>
+<li>打开文件</li>
+<li>读、写文件<ul>
 <li><strong>读</strong> 将文件内容读入内存</li>
 <li><strong>写</strong> 将内存内容写入文件</li>
 </ul>
 </li>
-<li><p>关闭文件<br>​    </p>
-</li>
+<li>关闭文件  </li>
 </ol>
-<h3 id="2-操作文件的函数-方法"><a href="#2-操作文件的函数-方法" class="headerlink" title="2. 操作文件的函数/方法"></a>2. 操作文件的函数/方法</h3><ul>
-<li>在<code>python</code>中要操作文件需要记住1个函数和3个方法  </li>
-</ul>
-<table>
-<thead>
-<tr>
-<th><strong>序号</strong></th>
-<th align="left"><strong>函数/方法</strong></th>
-<th><strong>说明</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>01</td>
-<td align="left">open</td>
-<td>打开文件，并返回文件操作的对象</td>
-</tr>
-<tr>
-<td>02</td>
-<td align="left">read</td>
-<td>将文件内容写入内存</td>
-</tr>
-<tr>
-<td>03</td>
-<td align="left">write</td>
-<td>将制定内容写入文件</td>
-</tr>
-<tr>
-<td>04</td>
-<td align="left">close</td>
-<td>关闭文件</td>
-</tr>
-</tbody></table>
-<ul>
-<li><code>open</code>函数负责打开文件，并返回文件对象</li>
-<li><code>read</code>/<code>write</code>/<code>close</code> 三个方法都需要通过<strong>文件对象</strong>来调用</li>
-</ul>
-<h4 id="2-1-read方法-——读取文件"><a href="#2-1-read方法-——读取文件" class="headerlink" title="2.1 read方法 ——读取文件"></a>2.1 read方法 ——读取文件</h4><ul>
-<li><p><code>open</code>函数等等第一个参数时要打开的(路径)文件名 <strong>注：区分大小写</strong></p>
-<ul>
-<li>如果文件<strong>存在</strong>，返回<strong>文件操作对象</strong></li>
-<li>如果文件<strong>不存在</strong>，会<strong>抛出异常</strong></li>
-</ul>
-</li>
-<li><p><code>read</code>方法可以一次性<strong>读入</strong>并<strong>返回</strong>文件的所有内容</p>
-</li>
-<li><p><code>close</code>负责关闭文件</p>
-<ul>
-<li>如果忘记<strong>关闭文件，会造成系统资源的消耗，而且会影响到后续对文件的访问</strong></li>
-</ul>
-</li>
-<li><p><strong>注意：</strong>方法执行后，会把 <strong>文件指针</strong> 移动到文件的末尾</p>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 打开 - 文件名需要注意大小写（一般需要添加编码格式）</span></span><br><span class="line">file = open(<span class="string">"readme.txt"</span>,encoding=<span class="string">'utf-8'</span>)</span><br><span class="line"><span class="comment"># 读取</span></span><br><span class="line">text = file.read()</span><br><span class="line">print(text)</span><br><span class="line"><span class="comment"># 关闭</span></span><br><span class="line">file.close()</span><br></pre></td></tr></table></figure>
-
-<h5 id="2-1-1-文件指针（补充）"><a href="#2-1-1-文件指针（补充）" class="headerlink" title="2.1.1 文件指针（补充）"></a>2.1.1 文件指针（补充）</h5><ul>
-<li>文件指针标记从哪个位置开始读取数据</li>
-<li><strong>第一次打开</strong> 文件时，通常文件指针会指向文件的开始位置</li>
-<li>当执行了<code>read</code>方法后，<strong>文件指针</strong> 会移动到<strong>读取内容的末尾</strong><ul>
-<li>默认情况下会移动到<strong>文件末尾</strong></li>
-</ul>
-</li>
-</ul>
-<p>比如：执行了一次<code>read</code>方法，读取了所有内容，再次调用<code>read</code>方法时，则不能获取到内容</p>
-<h5 id="2-1-2-按行读取文件的内容"><a href="#2-1-2-按行读取文件的内容" class="headerlink" title="2.1.2 按行读取文件的内容"></a>2.1.2 按行读取文件的内容</h5><ul>
-<li><code>read</code>方法默认会把文件的<strong>所有内容一次性读取到内存</strong></li>
-<li>如果文件太大，对内存的占用会非常严重</li>
-</ul>
-<p><strong>readline</strong>方法</p>
-<ul>
-<li><code>readline</code>方法可以一次读取一行内容</li>
-<li>方法执行后，会把<strong>文件指针</strong>移动到下一行，准备再次读取</li>
-</ul>
-<p><strong>读取大文件的正确姿势</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">file = open(<span class="string">"readme.txt"</span>,encoding=<span class="string">'utf-8'</span>)</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    text = file.readline()</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> text:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    print(text)</span><br><span class="line">file.close()</span><br></pre></td></tr></table></figure>
-
-
-
-<h4 id="2-2-打开文件的方式"><a href="#2-2-打开文件的方式" class="headerlink" title="2.2 打开文件的方式"></a>2.2 打开文件的方式</h4><ul>
-<li><code>open</code>函数默认以<strong>只读方式</strong>打开文件，并且返回文件对象</li>
-</ul>
-<p>语法如下：</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">f</span> = open(<span class="string">"文件名"</span>, <span class="string">"访问方式"</span>)</span><br></pre></td></tr></table></figure>
-
-<table>
-<thead>
-<tr>
-<th align="center"><strong>访问方式</strong></th>
-<th><strong>说明</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">r</td>
-<td>以<strong>只读</strong>方式打开文件。文件的指针将会放在文件的开头，这是<strong>默认模式</strong>。如果文件不存在，抛出异常</td>
-</tr>
-<tr>
-<td align="center">w</td>
-<td>以<strong>只写</strong>方式打开文件。如果文件存在会被<strong>覆盖</strong>。如果文件不存在，创建新文件</td>
-</tr>
-<tr>
-<td align="center">a</td>
-<td>以<strong>追加</strong>方式打开文件。如果该文件已存在，文件的指针将会放在文件的结尾。如果文件不存在，创建新文件进行写入</td>
-</tr>
-<tr>
-<td align="center">r+</td>
-<td>以<strong>读写</strong>方式打开文件。文件的指针将会放在文件的开头。如果文件不存在，抛出异常</td>
-</tr>
-<tr>
-<td align="center">w+</td>
-<td>以<strong>读写</strong>方式打开文件。如果文件存在会被<strong>覆盖</strong>。如果文件不存在，创建新文件</td>
-</tr>
-<tr>
-<td align="center">a+</td>
-<td>以<strong>读写</strong>方式打开文件。如果该文件已存在，文件指针将会放在文件的结尾。如果文件不存在，创建新文件进行写入</td>
-</tr>
-</tbody></table>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 打开 - 文件名需要注意大小写（一般需要添加编码格式）</span></span><br><span class="line">file = open(<span class="string">"readme.txt"</span>,<span class="string">'w'</span>,encoding=<span class="string">'utf-8'</span>)</span><br><span class="line"><span class="comment"># 写</span></span><br><span class="line">file.write(<span class="string">'英雄联盟'</span>)</span><br><span class="line">file.write(<span class="string">'绝地求生'</span>)</span><br><span class="line">file.write(<span class="string">'刺激战场'</span>)</span><br><span class="line"><span class="comment"># 关闭</span></span><br><span class="line">file.close()</span><br></pre></td></tr></table></figure>
-
-<h3 id="使用案例"><a href="#使用案例" class="headerlink" title="使用案例"></a>使用案例</h3><ul>
-<li>复制小文件</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">file_read = open(<span class="string">"readme.txt"</span>,encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">file_write = open(<span class="string">"readme[复件].txt"</span>,<span class="string">'w'</span>,encoding=<span class="string">'utf-8'</span>)</span><br><span class="line"></span><br><span class="line">text = file_read.read()</span><br><span class="line">file_write.write(text)</span><br><span class="line"></span><br><span class="line">file_read.close()</span><br><span class="line">file_write.close()</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>复制大文件</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">file_read = open(<span class="string">"readme.txt"</span>,encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">file_write = open(<span class="string">"readme[复件].txt"</span>,<span class="string">'w'</span>,encoding=<span class="string">'utf-8'</span>)</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    text = file_read.readline()</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> text:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    file_write.write(text)</span><br><span class="line">file_read.close()</span><br><span class="line">file_write.close()</span><br></pre></td></tr></table></figure>
-
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/03/20/%E6%96%87%E4%BB%B6%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 

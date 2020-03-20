@@ -5,17 +5,16 @@
     <url>/2020/03/20/%E6%96%87%E4%BB%B6%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/</url>
     <content><![CDATA[<h3 id="1-操作文件的套路"><a href="#1-操作文件的套路" class="headerlink" title="1. 操作文件的套路"></a>1. 操作文件的套路</h3><p>在计算机中，操作文件一般包括<strong>三个步骤</strong>：</p>
 <ol>
-<li><p>打开文件</p>
-</li>
-<li><p>读、写文件</p>
-<ul>
+<li>打开文件</li>
+<li>读、写文件<ul>
 <li><strong>读</strong> 将文件内容读入内存</li>
 <li><strong>写</strong> 将内存内容写入文件</li>
 </ul>
 </li>
-<li><p>关闭文件<br>​    </p>
-</li>
+<li>关闭文件  </li>
 </ol>
+<a id="more"></a>
+
 <h3 id="2-操作文件的函数-方法"><a href="#2-操作文件的函数-方法" class="headerlink" title="2. 操作文件的函数/方法"></a>2. 操作文件的函数/方法</h3><ul>
 <li>在<code>python</code>中要操作文件需要记住1个函数和3个方法  </li>
 </ul>
