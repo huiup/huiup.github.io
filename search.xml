@@ -1,6 +1,292 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>pandas之Series</title>
+    <url>/2020/04/15/pandas%E4%B9%8BSeries%E5%92%8CDataFrame/</url>
+    <content><![CDATA[<h3 id="1-Series"><a href="#1-Series" class="headerlink" title="1.Series"></a>1.Series</h3><p>线性的数据结构, Series是一个一维数组,比列表多了索引的概念</p>
+<p>必要条件</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-1-创建一个Series数据"><a href="#1-1-创建一个Series数据" class="headerlink" title="1.1 创建一个Series数据"></a>1.1 创建一个Series数据</h4><ul>
+<li>列表转换为Series</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = pd.Series([<span class="number">1997</span>, <span class="string">'zhang'</span>, <span class="string">'beijing'</span>, <span class="number">2020</span>])</span><br><span class="line">print(s)</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<p>打印结果：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="number">0</span>       <span class="number">1997</span></span><br><span class="line"><span class="number">1</span>      <span class="string">zhang</span></span><br><span class="line"><span class="number">2</span>    <span class="string">beijing</span></span><br><span class="line"><span class="number">3</span>       <span class="number">2020</span></span><br><span class="line"><span class="attr">dtype:</span> <span class="string">object</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>字典转换为Series</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">cities=&#123;<span class="string">'Beijing'</span>:<span class="number">55000</span>,<span class="string">'Shanghai'</span>:<span class="number">60000</span>,<span class="string">'shenzhen'</span>:<span class="number">50000</span>,<span class="string">'Hangzhou'</span>:<span class="number">20000</span>,<span class="string">'Guangzhou'</span>:<span class="number">45000</span>,<span class="string">'Suzhou'</span>:<span class="literal">None</span>&#125;</span><br><span class="line">apts=pd.Series(cities)</span><br><span class="line">print(apts)</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">Beijing</span>      <span class="string">55000.0</span></span><br><span class="line"><span class="attr">Shanghai</span>     <span class="string">60000.0</span></span><br><span class="line"><span class="attr">shenzhen</span>     <span class="string">50000.0</span></span><br><span class="line"><span class="attr">Hangzhou</span>     <span class="string">20000.0</span></span><br><span class="line"><span class="attr">Guangzhou</span>    <span class="string">45000.0</span></span><br><span class="line"><span class="attr">Suzhou</span>           <span class="string">NaN</span></span><br><span class="line"><span class="attr">dtype</span>: <span class="string">float64</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>用numpy ndarray构造一个Series<ul>
+<li>numpy.random.rand(n)返回一个有n个元素的一维<code>ndarray</code>对象，随机样本位于[0, 1)中。</li>
+<li>numpy.random.randn(n,m) 返回 n*m的ndarray对象，但不能用series转换</li>
+<li>numpy.random.randn(n)返回一个有n个元素的一维<code>ndarray</code>对象,是从标准正态分布中返回n个样本值。</li>
+<li>numpy.random.randn(n,m) 返回 n*m的ndarray对象，但不能用series转换</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">num = pd.Series(np.random.randn(<span class="number">5</span>))</span><br><span class="line">num_abc = pd.Series(np.random.randn(<span class="number">5</span>), index=list(<span class="string">'abcde'</span>))</span><br><span class="line">print(num)</span><br><span class="line">print(num_abc)</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line"><span class="number">0</span>    <span class="number">2.421419</span></span><br><span class="line"><span class="number">1</span>   <span class="number">-0.809526</span></span><br><span class="line"><span class="number">2</span>    <span class="number">1.838546</span></span><br><span class="line"><span class="number">3</span>    <span class="number">0.837238</span></span><br><span class="line"><span class="number">4</span>    <span class="number">1.223676</span></span><br><span class="line">dtype: <span class="built_in">float</span>64</span><br><span class="line">a    <span class="number">1.440783</span></span><br><span class="line">b    <span class="number">0.195176</span></span><br><span class="line">c   <span class="number">-1.202885</span></span><br><span class="line">d   <span class="number">-0.315326</span></span><br><span class="line">e   <span class="number">-1.168833</span></span><br><span class="line">dtype: <span class="built_in">float</span>64</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="1-2-指定index"><a href="#1-2-指定index" class="headerlink" title="1.2 指定index"></a>1.2 指定index</h4><ul>
+<li>默认用0到n-1来作为Series的index, 但也可以自己指定index</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = pd.Series([<span class="number">5664</span>, <span class="string">'guizhou'</span>, <span class="string">'beijing'</span>, <span class="number">2020</span>, <span class="string">'China'</span>, <span class="number">990</span>], index=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>])</span><br><span class="line">print(s)</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">1</span>       <span class="string">5664</span></span><br><span class="line"><span class="attr">2</span>    <span class="string">guizhou</span></span><br><span class="line"><span class="attr">3</span>    <span class="string">beijing</span></span><br><span class="line"><span class="attr">a</span>       <span class="string">2020</span></span><br><span class="line"><span class="attr">b</span>      <span class="string">China</span></span><br><span class="line"><span class="attr">c</span>        <span class="string">990</span></span><br><span class="line"><span class="attr">dtype</span>: <span class="string">object</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="1-3-访问数据"><a href="#1-3-访问数据" class="headerlink" title="1.3 访问数据"></a>1.3 访问数据</h4><ul>
+<li>访问其中数据(可以像对待一个list一样对待一个Series,完成各种切片的操作)</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = pd.Series([<span class="number">9</span>, <span class="string">'zheng'</span>, <span class="string">'beijing'</span>, <span class="number">128</span>, <span class="string">'usa'</span>, <span class="number">990</span>])</span><br><span class="line">print(s[<span class="number">1</span>:<span class="number">3</span>])    <span class="comment"># 选择第1到3个, 包左不包右</span></span><br><span class="line">print(s[[<span class="number">1</span>,<span class="number">3</span>]])  <span class="comment"># 选择第1个和第3个</span></span><br><span class="line">print(s[:<span class="number">-1</span>])    <span class="comment"># 选择第1个到倒数第1个</span></span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="number">1</span>      <span class="string">zheng</span> </span><br><span class="line"><span class="number">2</span>    <span class="string">beijing</span></span><br><span class="line"><span class="attr">dtype:</span> <span class="string">object</span></span><br><span class="line"><span class="number">1</span>    <span class="string">zheng</span></span><br><span class="line"><span class="number">3</span>      <span class="number">128</span></span><br><span class="line"><span class="attr">dtype:</span> <span class="string">object</span></span><br><span class="line"><span class="number">0</span>          <span class="number">9</span></span><br><span class="line"><span class="number">1</span>      <span class="string">zheng</span></span><br><span class="line"><span class="number">2</span>    <span class="string">beijing</span></span><br><span class="line"><span class="number">3</span>        <span class="number">128</span></span><br><span class="line"><span class="number">4</span>        <span class="string">usa</span></span><br><span class="line"><span class="attr">dtype:</span> <span class="string">object</span></span><br></pre></td></tr></table></figure>
+
+<p>​    </p>
+<h4 id="1-4-操作数据"><a href="#1-4-操作数据" class="headerlink" title="1.4 操作数据"></a>1.4 操作数据</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = pd.Series([<span class="number">9</span>, <span class="string">'zheng'</span>, <span class="string">'beijing'</span>, <span class="number">128</span>, <span class="string">'usa'</span>, <span class="number">990</span>], index=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="string">'e'</span>,<span class="string">'f'</span>,<span class="string">'g'</span>])</span><br><span class="line">sum0 = s[<span class="number">1</span>:<span class="number">3</span>] + s[<span class="number">1</span>:<span class="number">3</span>]</span><br><span class="line">sum1 = s[<span class="number">1</span>:<span class="number">4</span>] + s[<span class="number">1</span>:<span class="number">4</span>]</span><br><span class="line">sum2 = s[<span class="number">1</span>:<span class="number">3</span>] + s[<span class="number">1</span>:<span class="number">4</span>]</span><br><span class="line">sum3 = s[:<span class="number">3</span>] + s[<span class="number">1</span>:]</span><br><span class="line">print(sum0)</span><br><span class="line">print(sum1)</span><br><span class="line">print(sum2)</span><br><span class="line">print(sum3)</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">2</span>        <span class="string">zhengzheng</span></span><br><span class="line"><span class="attr">3</span>    <span class="string">beijingbeijing</span></span><br><span class="line"><span class="attr">dtype</span>: <span class="string">object      </span></span><br><span class="line"><span class="attr">2</span>        <span class="string">zhengzheng</span></span><br><span class="line"><span class="attr">3</span>    <span class="string">beijingbeijing</span></span><br><span class="line"><span class="attr">e</span>               <span class="string">256</span></span><br><span class="line"><span class="attr">dtype</span>: <span class="string">object</span></span><br><span class="line"><span class="attr">2</span>        <span class="string">zhengzheng</span></span><br><span class="line"><span class="attr">3</span>    <span class="string">beijingbeijing</span></span><br><span class="line"><span class="attr">e</span>               <span class="string">NaN</span></span><br><span class="line"><span class="attr">dtype</span>: <span class="string">object</span></span><br><span class="line"><span class="attr">1</span>               <span class="string">NaN</span></span><br><span class="line"><span class="attr">2</span>        <span class="string">zhengzheng</span></span><br><span class="line"><span class="attr">3</span>    <span class="string">beijingbeijing</span></span><br><span class="line"><span class="attr">e</span>               <span class="string">NaN</span></span><br><span class="line"><span class="attr">f</span>               <span class="string">NaN</span></span><br><span class="line"><span class="attr">g</span>               <span class="string">NaN</span></span><br><span class="line"><span class="attr">dtype</span>: <span class="string">object</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="1-5-查找-通过索引"><a href="#1-5-查找-通过索引" class="headerlink" title="1.5 查找(通过索引)"></a>1.5 查找(通过索引)</h4><ul>
+<li>是否存在</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = &#123;<span class="string">"ton"</span>: <span class="number">20</span>, <span class="string">"mary"</span>: <span class="number">18</span>, <span class="string">"jack"</span>: <span class="number">19</span>, <span class="string">"jim"</span>: <span class="number">22</span>, <span class="string">"lj"</span>: <span class="number">24</span>, <span class="string">"car"</span>: <span class="literal">None</span>&#125;</span><br><span class="line">sa = pd.Series(s)</span><br><span class="line">print(<span class="string">'mary'</span> <span class="keyword">in</span> sa)</span><br><span class="line">print(<span class="number">20</span> <span class="keyword">in</span> sa)</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="literal">False</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>范围查找</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = &#123;<span class="string">"ton"</span>: <span class="number">20</span>, <span class="string">"mary"</span>: <span class="number">18</span>, <span class="string">"jack"</span>: <span class="number">19</span>, <span class="string">"jim"</span>: <span class="number">22</span>, <span class="string">"lj"</span>: <span class="number">24</span>, <span class="string">"car"</span>: <span class="literal">None</span>&#125;</span><br><span class="line">sa = pd.Series(s)</span><br><span class="line">print(sa[sa&gt;<span class="number">19</span>])</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">ton    <span class="number">20.0</span></span><br><span class="line">jim    <span class="number">22.0</span></span><br><span class="line">lj     <span class="number">24.0</span></span><br><span class="line">dtype: <span class="built_in">float</span>64</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>中位数</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = &#123;<span class="string">"ton"</span>: <span class="number">20</span>, <span class="string">"mary"</span>: <span class="number">18</span>, <span class="string">"jack"</span>: <span class="number">19</span>, <span class="string">"jim"</span>: <span class="number">22</span>, <span class="string">"lj"</span>: <span class="number">24</span>, <span class="string">"car"</span>: <span class="literal">None</span>&#125;</span><br><span class="line">sa = pd.Series(s,)</span><br><span class="line">print(sa.median()) <span class="comment"># 20</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>判断是否大于中位数</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = &#123;<span class="string">"ton"</span>: <span class="number">20</span>, <span class="string">"mary"</span>: <span class="number">18</span>, <span class="string">"jack"</span>: <span class="number">19</span>, <span class="string">"jim"</span>: <span class="number">22</span>, <span class="string">"lj"</span>: <span class="number">24</span>, <span class="string">"car"</span>: <span class="literal">None</span>&#125;</span><br><span class="line">sa = pd.Series(s)</span><br><span class="line">print(sa&gt;sa.median())</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">ton</span>     <span class="literal">False</span></span><br><span class="line"><span class="string">mary</span>    <span class="literal">False</span></span><br><span class="line"><span class="string">jack</span>    <span class="literal">False</span></span><br><span class="line"><span class="string">jim</span>      <span class="literal">True</span></span><br><span class="line"><span class="string">lj</span>       <span class="literal">True</span></span><br><span class="line"><span class="string">car</span>     <span class="literal">False</span></span><br><span class="line"><span class="attr">dtype:</span> <span class="string">bool</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>找出大于中位数的数</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = &#123;<span class="string">"ton"</span>: <span class="number">20</span>, <span class="string">"mary"</span>: <span class="number">18</span>, <span class="string">"jack"</span>: <span class="number">19</span>, <span class="string">"jim"</span>: <span class="number">22</span>, <span class="string">"lj"</span>: <span class="number">24</span>, <span class="string">"car"</span>: <span class="literal">None</span>&#125;</span><br><span class="line">sa = pd.Series(s)</span><br><span class="line">print(sa[sa &gt; sa.median()])</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">jim    <span class="number">22.0</span></span><br><span class="line">lj     <span class="number">24.0</span></span><br><span class="line">dtype: <span class="built_in">float</span>64</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-6-Series赋值"><a href="#1-6-Series赋值" class="headerlink" title="1.6 Series赋值"></a>1.6 Series赋值</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = &#123;<span class="string">"ton"</span>: <span class="number">20</span>, <span class="string">"mary"</span>: <span class="number">18</span>, <span class="string">"jack"</span>: <span class="number">19</span>, <span class="string">"jim"</span>: <span class="number">22</span>, <span class="string">"lj"</span>: <span class="number">24</span>, <span class="string">"car"</span>: <span class="literal">None</span>&#125;</span><br><span class="line">sa = pd.Series(s, name=<span class="string">"age"</span>)</span><br><span class="line">print(s)</span><br><span class="line">print(<span class="string">'----------------'</span>)</span><br><span class="line">sa[<span class="string">'ton'</span>] = <span class="number">99</span></span><br><span class="line">print(sa)</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">&#123;'ton':</span> <span class="number">20</span><span class="string">,</span> <span class="attr">'mary':</span> <span class="number">18</span><span class="string">,</span> <span class="attr">'jack':</span> <span class="number">19</span><span class="string">,</span> <span class="attr">'jim':</span> <span class="number">22</span><span class="string">,</span> <span class="attr">'lj':</span> <span class="number">24</span><span class="string">,</span> <span class="attr">'car':</span> <span class="string">None&#125;</span></span><br><span class="line"><span class="string">----------------</span></span><br><span class="line"><span class="string">ton</span>     <span class="number">99.0</span></span><br><span class="line"><span class="string">mary</span>    <span class="number">18.0</span></span><br><span class="line"><span class="string">jack</span>    <span class="number">19.0</span></span><br><span class="line"><span class="string">jim</span>     <span class="number">22.0</span></span><br><span class="line"><span class="string">lj</span>      <span class="number">24.0</span></span><br><span class="line"><span class="string">car</span>      <span class="string">NaN</span></span><br><span class="line"><span class="attr">Name:</span> <span class="string">age,</span> <span class="attr">dtype:</span> <span class="string">float64</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>条件赋值</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = &#123;<span class="string">"ton"</span>: <span class="number">20</span>, <span class="string">"mary"</span>: <span class="number">18</span>, <span class="string">"jack"</span>: <span class="number">19</span>, <span class="string">"jim"</span>: <span class="number">22</span>, <span class="string">"lj"</span>: <span class="number">24</span>, <span class="string">"car"</span>: <span class="literal">None</span>&#125;</span><br><span class="line">sa = pd.Series(s)</span><br><span class="line">print(s) <span class="comment"># 打印原字典</span></span><br><span class="line">print(<span class="string">'---------------------'</span>)   <span class="comment"># 分割线</span></span><br><span class="line">sa[sa&gt;<span class="number">19</span>] = <span class="number">88</span> <span class="comment"># 将所有大于19的同一改为88</span></span><br><span class="line">print(sa) <span class="comment"># 打印更改之后的数据</span></span><br><span class="line">print(<span class="string">'---------------------'</span>)   <span class="comment"># 分割线</span></span><br><span class="line">print(sa / <span class="number">2</span>)<span class="comment"># 将所有数据除以2</span></span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="string">&#123;'ton':</span> <span class="number">20</span><span class="string">,</span> <span class="attr">'mary':</span> <span class="number">18</span><span class="string">,</span> <span class="attr">'jack':</span> <span class="number">19</span><span class="string">,</span> <span class="attr">'jim':</span> <span class="number">22</span><span class="string">,</span> <span class="attr">'lj':</span> <span class="number">24</span><span class="string">,</span> <span class="attr">'car':</span> <span class="string">None&#125;</span></span><br><span class="line"><span class="string">---------------------</span></span><br><span class="line"><span class="string">ton</span>     <span class="number">88.0</span></span><br><span class="line"><span class="string">mary</span>    <span class="number">18.0</span></span><br><span class="line"><span class="string">jack</span>    <span class="number">19.0</span></span><br><span class="line"><span class="string">jim</span>     <span class="number">88.0</span></span><br><span class="line"><span class="string">lj</span>      <span class="number">88.0</span></span><br><span class="line"><span class="string">car</span>      <span class="string">NaN</span></span><br><span class="line"><span class="attr">dtype:</span> <span class="string">float64</span></span><br><span class="line"><span class="string">---------------------</span></span><br><span class="line"><span class="string">ton</span>     <span class="number">44.0</span></span><br><span class="line"><span class="string">mary</span>     <span class="number">9.0</span></span><br><span class="line"><span class="string">jack</span>     <span class="number">9.5</span></span><br><span class="line"><span class="string">jim</span>     <span class="number">44.0</span></span><br><span class="line"><span class="string">lj</span>      <span class="number">44.0</span></span><br><span class="line"><span class="string">car</span>      <span class="string">NaN</span></span><br><span class="line"><span class="attr">dtype:</span> <span class="string">float64</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2-DataFrame"><a href="#2-DataFrame" class="headerlink" title="2.DataFrame"></a>2.DataFrame</h3><p>DataFrame 类型类似于<strong>数据库表结构</strong>的数据结构，其含有行索引和列索引，可以将DataFrame 想成是由相同索引的Series组成的Dict类型。在其底层是通过二维以及一维的数据块实现。DataFrame即有行索引也有列索引，可以被看做是由Series组成的字典。</p>
+<h4 id="2-1-创建"><a href="#2-1-创建" class="headerlink" title="2.1 创建"></a>2.1 创建</h4><ul>
+<li>通过列表创建</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df = DataFrame([</span><br><span class="line">[<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>,<span class="string">'d'</span>],</span><br><span class="line">[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line">])</span><br><span class="line">print(df)</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">   <span class="number">0</span>  <span class="number">1</span>  <span class="number">2</span>  <span class="number">3</span></span><br><span class="line"><span class="number">0</span>  a  b  c  d</span><br><span class="line"><span class="number">1</span>  <span class="number">1</span>  <span class="number">2</span>  <span class="number">3</span>  <span class="number">4</span></span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>通过字典创建</li>
+</ul>
+<figure class="highlight prolog"><table><tr><td class="code"><pre><span class="line">data = &#123;</span><br><span class="line">    <span class="string">'state'</span>:[<span class="string">'ya'</span>,<span class="string">'yaho'</span>,<span class="string">'yahho'</span>,<span class="string">'Nevada'</span>,<span class="string">'mikasa'</span>],</span><br><span class="line">    <span class="string">'year'</span>:[<span class="number">2000</span>,<span class="number">2001</span>,<span class="number">2002</span>,<span class="number">2001</span>,<span class="number">2002</span>],</span><br><span class="line">    <span class="string">'pop'</span>:[<span class="number">1.5</span>,<span class="number">1.7</span>,<span class="number">3.6</span>,<span class="number">2.4</span>,<span class="number">2.9</span>]</span><br><span class="line">&#125;</span><br><span class="line">df = pd.<span class="symbol">DataFrame</span>(data)</span><br><span class="line">print(df)</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight lsl"><table><tr><td class="code"><pre><span class="line">    <span class="section">state</span>  year  pop</span><br><span class="line"><span class="number">0</span>      ya  <span class="number">2000</span>  <span class="number">1.5</span></span><br><span class="line"><span class="number">1</span>    yaho  <span class="number">2001</span>  <span class="number">1.7</span></span><br><span class="line"><span class="number">2</span>   yahho  <span class="number">2002</span>  <span class="number">3.6</span></span><br><span class="line"><span class="number">3</span>  Nevada  <span class="number">2001</span>  <span class="number">2.4</span></span><br><span class="line"><span class="number">4</span>  mikasa  <span class="number">2002</span>  <span class="number">2.9</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>DataFrame的行索引是index，列索引是columns，我们可以在创建DataFrame时指定索引的值：<ul>
+<li>指定<strong>行索引</strong>时的个数须与行数保持一致，否则会报错</li>
+<li>指定<strong>列索引</strong>时的个数<strong>多于</strong>列数时，多的列填充<code>NaN</code>;<strong>少于</strong>列数时，少的列将被<strong>去除</strong></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = &#123;</span><br><span class="line">    <span class="string">'state'</span>:[<span class="string">'ya'</span>,<span class="string">'yaho'</span>,<span class="string">'yahho'</span>,<span class="string">'Nevada'</span>,<span class="string">'mikasa'</span>],</span><br><span class="line">    <span class="string">'year'</span>:[<span class="number">2000</span>,<span class="number">2001</span>,<span class="number">2002</span>,<span class="number">2001</span>,<span class="number">2002</span>],</span><br><span class="line">    <span class="string">'pop'</span>:[<span class="number">1.5</span>,<span class="number">1.7</span>,<span class="number">3.6</span>,<span class="number">2.4</span>,<span class="number">2.9</span>]</span><br><span class="line">&#125;</span><br><span class="line">df = pd.DataFrame(data,index=[<span class="string">'one'</span>,<span class="string">'two'</span>,<span class="string">'three'</span>,<span class="string">'four'</span>,<span class="string">'five'</span>],columns=[<span class="string">'year'</span>,<span class="string">'state'</span>,<span class="string">'pop'</span>,<span class="string">'debt'</span>])</span><br><span class="line">print(df)</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight lsl"><table><tr><td class="code"><pre><span class="line">       year   <span class="section">state</span>  pop debt</span><br><span class="line">one    <span class="number">2000</span>      ya  <span class="number">1.5</span>  NaN</span><br><span class="line">two    <span class="number">2001</span>    yaho  <span class="number">1.7</span>  NaN</span><br><span class="line">three  <span class="number">2002</span>   yahho  <span class="number">3.6</span>  NaN</span><br><span class="line">four   <span class="number">2001</span>  Nevada  <span class="number">2.4</span>  NaN</span><br><span class="line">five   <span class="number">2002</span>  mikasa  <span class="number">2.9</span>  NaN</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用嵌套字典也可以创建DataFrame，此时外层字典的键作为列索引，内层键则作为行索引:</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = &#123;<span class="string">'Nevada'</span>:&#123;<span class="number">2001</span>:<span class="number">2.4</span>,<span class="number">2002</span>:<span class="number">2.9</span>&#125;,<span class="string">'Ohio'</span>:&#123;<span class="number">2000</span>:<span class="number">1.5</span>,<span class="number">2001</span>:<span class="number">1.7</span>,<span class="number">2002</span>:<span class="number">3.6</span>&#125;&#125;</span><br><span class="line">df = pd.DataFrame(data)</span><br><span class="line">print(df)</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">      Nevada  Ohio</span><br><span class="line"><span class="number">2001</span>     <span class="number">2.4</span>   <span class="number">1.7</span></span><br><span class="line"><span class="number">2002</span>     <span class="number">2.9</span>   <span class="number">3.6</span></span><br><span class="line"><span class="number">2000</span>     NaN   <span class="number">1.5</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>我们可以用index，columns，values来访问DataFrame的行索引，列索引以及数据值，数据值返回的是一个二维的ndarray</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="code"><pre><span class="line">data = &#123;<span class="string">'Nevada'</span>:&#123;<span class="number">2001</span>:<span class="number">2.4</span>,<span class="number">2002</span>:<span class="number">2.9</span>&#125;,<span class="string">'Ohio'</span>:&#123;<span class="number">2000</span>:<span class="number">1.5</span>,<span class="number">2001</span>:<span class="number">1.7</span>,<span class="number">2002</span>:<span class="number">3.6</span>&#125;&#125;</span><br><span class="line">df = pd.DataFrame(data)</span><br><span class="line"><span class="function"><span class="title">print</span><span class="params">(df)</span></span></span><br><span class="line"><span class="function"><span class="title">print</span><span class="params">(df.values)</span></span></span><br><span class="line"><span class="function"><span class="title">print</span><span class="params">(df.index)</span></span></span><br><span class="line"><span class="function"><span class="title">print</span><span class="params">(df.columns)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">      Nevada  Ohio</span><br><span class="line"><span class="number">2001</span>     <span class="number">2.4</span>   <span class="number">1.7</span></span><br><span class="line"><span class="number">2002</span>     <span class="number">2.9</span>   <span class="number">3.6</span></span><br><span class="line"><span class="number">2000</span>     NaN   <span class="number">1.5</span></span><br><span class="line">[[<span class="number">2.4</span> <span class="number">1.7</span>]</span><br><span class="line"> [<span class="number">2.9</span> <span class="number">3.6</span>]</span><br><span class="line"> [nan <span class="number">1.5</span>]]</span><br><span class="line">Int64Index([<span class="number">2001</span>, <span class="number">2002</span>, <span class="number">2000</span>], dtype=<span class="string">'int64'</span>)</span><br><span class="line">Index([<span class="string">'Nevada'</span>, <span class="string">'Ohio'</span>], dtype=<span class="string">'object'</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-读取文件"><a href="#2-2-读取文件" class="headerlink" title="2.2 读取文件"></a>2.2 读取文件</h4><p>读取文件生成DataFrame最常用的是read_csv,read_table方法。该方法中几个重要的参数如下所示：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>header</td>
+<td align="center">指定第几行作为列名(忽略注解行)，如果没有指定列名，默认header=0; 如果指定了列名header=None</td>
+</tr>
+<tr>
+<td>index_col</td>
+<td align="center">默认作为索引的为第一列，可以设为index_col为-1，表明没有索引列</td>
+</tr>
+<tr>
+<td>nrows</td>
+<td align="center">表明读取的行数</td>
+</tr>
+<tr>
+<td>sep或delimiter</td>
+<td align="center">分隔符，read_csv默认是逗号，而read_table默认是制表符\t</td>
+</tr>
+<tr>
+<td>encoding</td>
+<td align="center">编码格式</td>
+</tr>
+</tbody></table>
+<p>如：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df=pd.read_csv(<span class="string">'data1.csv'</span>, sep=<span class="string">','</span>,encoding=<span class="string">'utf-8'</span>,header=<span class="literal">None</span>)</span><br></pre></td></tr></table></figure>
+
+<p>其他创建DataFrame的方式有很多，比如我们可以通过读取mysql或者mongoDB来生成，也可以读取json文件等等，这里就不再介绍。</p>
+]]></content>
+      <categories>
+        <category>pandas</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pandas之reindex</title>
+    <url>/2020/04/15/pandas%E4%B9%8Breindex/</url>
+    <content><![CDATA[<h3 id="reindex重新索引"><a href="#reindex重新索引" class="headerlink" title="reindex重新索引"></a>reindex重新索引</h3><p>reindex()是pandas对象的一个重要方法，其作用是创建一个新索引的新对象。</p>
+<p>必要操作：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> *</span><br></pre></td></tr></table></figure>
+
+<h4 id="1、对Series对象重新索引"><a href="#1、对Series对象重新索引" class="headerlink" title="1、对Series对象重新索引"></a>1、对Series对象重新索引</h4><a id="more"></a>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">test1=pd.Series([<span class="number">1</span>,<span class="number">7</span>,<span class="number">3</span>,<span class="number">9</span>],index=[<span class="string">'d'</span>,<span class="string">'c'</span>,<span class="string">'a'</span>,<span class="string">'f'</span>])</span><br><span class="line">print(test1)</span><br></pre></td></tr></table></figure>
+
+<p>代码结果：</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">d    <span class="number">1</span></span><br><span class="line">c    <span class="number">7</span></span><br><span class="line">a    <span class="number">3</span></span><br><span class="line">f    <span class="number">9</span></span><br><span class="line">dtype: <span class="built_in">int</span>64</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>调用<strong>reindex</strong> 将会重新排序，缺失值则用NaN填补(索引值不变，如：a:3,c:7)</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">test2=test1.reindex([<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>,<span class="string">'d'</span>,<span class="string">'e'</span>,<span class="string">'f'</span>])</span><br></pre></td></tr></table></figure>
+
+<p>代码结果：</p>
+<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="attr">a</span>    <span class="string">3.0</span></span><br><span class="line"><span class="attr">b</span>    <span class="string">NaN</span></span><br><span class="line"><span class="attr">c</span>    <span class="string">7.0</span></span><br><span class="line"><span class="attr">d</span>    <span class="string">1.0</span></span><br><span class="line"><span class="attr">e</span>    <span class="string">NaN</span></span><br><span class="line"><span class="attr">f</span>    <span class="string">9.0</span></span><br><span class="line"><span class="attr">dtype</span>: <span class="string">float64</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>传入<strong>method=” “</strong>重新索引时选择插值处理方式：<ul>
+<li>method=’ffill’或’pad 前向填充</li>
+<li>method=’bfill’或’backfill 后向填充</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 前向填充</span></span><br><span class="line">test3=pd.Series([<span class="string">'blue'</span>,<span class="string">'red'</span>,<span class="string">'black'</span>],index=[<span class="number">0</span>,<span class="number">2</span>,<span class="number">4</span>])</span><br><span class="line">test4=test3.reindex(range(<span class="number">6</span>),method=<span class="string">'ffill'</span>)</span><br><span class="line">print(test4)</span><br><span class="line"><span class="comment"># 后向填充</span></span><br><span class="line">test3=pd.Series([<span class="string">'blue'</span>,<span class="string">'red'</span>,<span class="string">'black'</span>],index=[<span class="number">0</span>,<span class="number">2</span>,<span class="number">4</span>])</span><br><span class="line">test4=test3.reindex(range(<span class="number">6</span>),method=<span class="string">'bfill'</span>)</span><br><span class="line">print(test4)</span><br></pre></td></tr></table></figure>
+
+<p>代码结果：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 前向填充</span></span><br><span class="line"><span class="number">0</span>     blue</span><br><span class="line"><span class="number">1</span>     blue</span><br><span class="line"><span class="number">2</span>      red</span><br><span class="line"><span class="number">3</span>      red</span><br><span class="line"><span class="number">4</span>    black</span><br><span class="line"><span class="number">5</span>    black</span><br><span class="line">dtype: object</span><br><span class="line"><span class="comment"># 后向填充</span></span><br><span class="line"><span class="number">0</span>     blue</span><br><span class="line"><span class="number">1</span>      red</span><br><span class="line"><span class="number">2</span>      red</span><br><span class="line"><span class="number">3</span>    black</span><br><span class="line"><span class="number">4</span>    black</span><br><span class="line"><span class="number">5</span>      NaN</span><br><span class="line">dtype: object</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="2、对DataFrame对象重新索引"><a href="#2、对DataFrame对象重新索引" class="headerlink" title="2、对DataFrame对象重新索引"></a>2、对DataFrame对象重新索引</h3><p>对于DataFrame对象，reindex能修改行索引和列索引。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df1=pd.DataFrame(np.arange(<span class="number">9</span>).reshape(<span class="number">3</span>,<span class="number">3</span>),index=[<span class="string">'a'</span>,<span class="string">'c'</span>,<span class="string">'d'</span>],columns=[<span class="string">'one'</span>,<span class="string">'two'</span>,<span class="string">'four'</span>])</span><br><span class="line">print(df1)</span><br></pre></td></tr></table></figure>
+
+<p>代码结果：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">   one  two  four</span><br><span class="line">a    <span class="number">0</span>    <span class="number">1</span>     <span class="number">2</span></span><br><span class="line">c    <span class="number">3</span>    <span class="number">4</span>     <span class="number">5</span></span><br><span class="line">d    <span class="number">6</span>    <span class="number">7</span>     <span class="number">8</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>默认对索引重新排序</li>
+</ul>
+<p>只传入一个序列不能重新排序列索引(即只重新排序行索引<code>index</code>)</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df1=pd.DataFrame(np.arange(<span class="number">9</span>).reshape(<span class="number">3</span>,<span class="number">3</span>),index=[<span class="string">'a'</span>,<span class="string">'c'</span>,<span class="string">'d'</span>],columns=[<span class="string">'one'</span>,<span class="string">'two'</span>,<span class="string">'four'</span>])</span><br><span class="line">df2 = df1.reindex([<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>,<span class="string">'d'</span>])</span><br><span class="line">print(df2)</span><br></pre></td></tr></table></figure>
+
+<p>代码结果：</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">   one  two  four</span><br><span class="line">a  <span class="number">0.0</span>  <span class="number">1.0</span>   <span class="number">2.0</span></span><br><span class="line">b  NaN  NaN   NaN</span><br><span class="line">c  <span class="number">3.0</span>  <span class="number">4.0</span>   <span class="number">5.0</span></span><br><span class="line">d  <span class="number">6.0</span>  <span class="number">7.0</span>   <span class="number">8.0</span></span><br></pre></td></tr></table></figure>
+
+<p>  同时修改行索引和列索引</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df1=pd.DataFrame(np.arange(<span class="number">9</span>).reshape(<span class="number">3</span>,<span class="number">3</span>),index=[<span class="string">'a'</span>,<span class="string">'c'</span>,<span class="string">'d'</span>],columns=[<span class="string">'one'</span>,<span class="string">'two'</span>,<span class="string">'four'</span>])</span><br><span class="line">df2 = df1.reindex(index=[<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>,<span class="string">'d'</span>],columns=[<span class="string">'one'</span>,<span class="string">'two'</span>,<span class="string">'three'</span>,<span class="string">'four'</span>])</span><br><span class="line">print(df2)</span><br></pre></td></tr></table></figure>
+
+<p>代码结果：</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">   one  two  three  four</span><br><span class="line">a  <span class="number">0.0</span>  <span class="number">1.0</span>    NaN   <span class="number">2.0</span></span><br><span class="line">b  NaN  NaN    NaN   NaN</span><br><span class="line">c  <span class="number">3.0</span>  <span class="number">4.0</span>    NaN   <span class="number">5.0</span></span><br><span class="line">d  <span class="number">6.0</span>  <span class="number">7.0</span>    NaN   <span class="number">8.0</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>传入<strong>fill_value=n</strong>用n代替缺失值(默认为NaN)</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">df1 = pd.DataFrame(np.arange(<span class="number">9</span>).reshape(<span class="number">3</span>,<span class="number">3</span>),index=[<span class="string">'a'</span>,<span class="string">'c'</span>,<span class="string">'d'</span>],columns=[<span class="string">'one'</span>,<span class="string">'two'</span>,<span class="string">'four'</span>])</span><br><span class="line">df2 = df1.reindex(index=[<span class="string">'a'</span>,<span class="string">'b'</span>,<span class="string">'c'</span>,<span class="string">'d'</span>],columns=[<span class="string">'one'</span>,<span class="string">'two'</span>,<span class="string">'three'</span>,<span class="string">'four'</span>],fill_value=<span class="number">100</span>)</span><br><span class="line">print(df2)</span><br></pre></td></tr></table></figure>
+
+<p>代码结果：</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line">   one  two  three  four</span><br><span class="line">a    <span class="number">0</span>    <span class="number">1</span>    <span class="number">100</span>     <span class="number">2</span></span><br><span class="line">b  <span class="number">100</span>  <span class="number">100</span>    <span class="number">100</span>   <span class="number">100</span></span><br><span class="line">c    <span class="number">3</span>    <span class="number">4</span>    <span class="number">100</span>     <span class="number">5</span></span><br><span class="line">d    <span class="number">6</span>    <span class="number">7</span>    <span class="number">100</span>     <span class="number">8</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>pandas</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>word文件转存为txt</title>
+    <url>/2020/03/26/word%E6%96%87%E4%BB%B6%E8%BD%AC%E5%AD%98%E4%B8%BAtxt/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>文本处理</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>文件的基本操作</title>
     <url>/2020/03/20/%E6%96%87%E4%BB%B6%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/</url>
     <content><![CDATA[<h3 id="1-操作文件的套路"><a href="#1-操作文件的套路" class="headerlink" title="1. 操作文件的套路"></a>1. 操作文件的套路</h3><p>在计算机中，操作文件一般包括<strong>三个步骤</strong>：</p>
@@ -380,8 +666,8 @@
         <category>python</category>
       </categories>
       <tags>
-        <tag>json</tag>
         <tag>python</tag>
+        <tag>json</tag>
       </tags>
   </entry>
   <entry>
@@ -406,6 +692,7 @@
 <li>\w匹配单词字符，等价于<code>[A-Za-z0-9_]</code>   \W(大写W)相反</li>
 <li>\s空白字符 \n \t \r 空格     \S相反</li>
 <li>. 匹配除换行符(\n)之外其他所有字符</li>
+<li>[\u4E00-\u9FA5]汉字的匹配</li>
 </ul>
 <h3 id="数量词：-匹配的是字符或表达式"><a href="#数量词：-匹配的是字符或表达式" class="headerlink" title="数量词：(匹配的是字符或表达式)"></a>数量词：(匹配的是字符或表达式)</h3><ul>
 <li>如：<code>[a-z]{3,6}</code></li>
@@ -422,11 +709,11 @@
 <li>^表示：从字符串的开始匹配</li>
 <li>$表示：从字符串的末尾开始匹配</li>
 </ul>
-<h2 id="python中re模块中几个常用的方法"><a href="#python中re模块中几个常用的方法" class="headerlink" title="python中re模块中几个常用的方法"></a>python中re模块中几个常用的方法</h2><h3 id="sub-方法：-替换"><a href="#sub-方法：-替换" class="headerlink" title="sub()方法：(替换)"></a>sub()方法：(替换)</h3><p>sub(正则表达式,替换内容,原字符内容[,替换次数,匹配规则])</p>
-<figure class="highlight plain"><figcaption><span>repl, string[, count</span></figcaption><table><tr><td class="code"><pre><span class="line">string也可以为一个函数</span><br><span class="line">count:默认为0，表示替换不限制次数；为1则替换1次</span><br><span class="line"></span><br><span class="line">&#96;&#96;&#96;python</span><br><span class="line">import re</span><br><span class="line">s &#x3D; &#39;A8C3721D86&#39;</span><br><span class="line">def convert(value):</span><br><span class="line">    matched &#x3D; value.group()#得到具体的字符</span><br><span class="line">    if int(matched) &gt;&#x3D; 6:</span><br><span class="line">        return &#39;9&#39;</span><br><span class="line">    else:</span><br><span class="line">        return &#39;0&#39;</span><br><span class="line">r &#x3D; re.sub(&#39;\d&#39;,convert,s)</span><br><span class="line">print(r)</span><br></pre></td></tr></table></figure>
-<h3 id="findall-方法：-查找"><a href="#findall-方法：-查找" class="headerlink" title="findall()方法：(查找)"></a>findall()方法：(查找)</h3><p><code>findall(pattern, string[, flags=0])</code><br>findall(正则表达式,字符内容[,匹配模式])<br>可选参数’匹配模式’的介绍：<br>re.I：让匹配不区分大小写<br>re.S：对.行为进行改变，使.匹配包括换行(\n)在内的所有字符。<br>多的模式用’|’间隔，如：findall(正则表达式,字符内容[re.I | re.S])  </p>
-<h3 id="match-方法"><a href="#match-方法" class="headerlink" title="match()方法"></a>match()方法</h3><p><code>match(pattern, string, flags=0)</code><br>功能：从字符串的第一个字符开始匹配，若不成功则返回空(None)，匹配成功就返回(对，我溜了)。成功就返回一个包含匹配学习的对象，可以用group()方法获取值,span()方法获取匹配值在原字符串中的位置。  </p>
-<h3 id="search-方法"><a href="#search-方法" class="headerlink" title="search()方法"></a>search()方法</h3><p><code>search(pattern, string, flags=0)</code><br>功能：搜索整个字符串，找到第一个匹配结果就返回(我也溜了)，不成功就返回None。返回一个包含匹配信息的对象，可以用group()方法获取值,span()方法获取匹配值在原字符串中的位置。  </p>
+<h2 id="python中re模块中几个常用的方法"><a href="#python中re模块中几个常用的方法" class="headerlink" title="python中re模块中几个常用的方法"></a>python中re模块中几个常用的方法</h2><h3 id="sub-方法：-替换"><a href="#sub-方法：-替换" class="headerlink" title="sub()方法：(替换)"></a>sub()方法：(替换)</h3><p>sub(正则表达式,替换内容,原字符内容[,替换次数,匹配规则])<br><code>sub(pattern, repl, string[, count=0, flags=0])</code><br>string也可以为一个函数<br>count:默认为0，表示替换不限制次数；为1则替换1次  </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line">s = <span class="string">'A8C3721D86'</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">convert</span><span class="params">(value)</span>:</span></span><br><span class="line">    matched = value.group()<span class="comment">#得到具体的字符</span></span><br><span class="line">    <span class="keyword">if</span> int(matched) &gt;= <span class="number">6</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'9'</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'0'</span></span><br><span class="line">r = re.sub(<span class="string">'\d'</span>,convert,s)</span><br><span class="line">print(r)</span><br></pre></td></tr></table></figure>
+<h3 id="findall-方法：-查找"><a href="#findall-方法：-查找" class="headerlink" title="findall()方法：(查找)"></a>findall()方法：(查找)</h3><p><code>findall(pattern, string[, flags=0])</code><br>findall(正则表达式,字符内容[,匹配模式])<br>可选参数<code>flags</code>的介绍：<br>re.I：让匹配不区分大小写<br>re.S：对.行为进行改变，使.匹配包括换行(\n)在内的所有字符。<br>多的模式用’|’间隔，如：findall(正则表达式,字符内容[re.I | re.S])  </p>
+<h3 id="match-方法"><a href="#match-方法" class="headerlink" title="match()方法"></a>match()方法</h3><p><code>match(pattern, string, flags=0)</code><br>功能：从字符串的第一个字符开始匹配，若不成功则返回空(None)，匹配成功就返回(对，我溜了)。成功就返回一个包含匹配学习的对象，可以用<code>group()</code>方法获取值,span()方法获取匹配值在原字符串中的位置。  </p>
+<h3 id="search-方法"><a href="#search-方法" class="headerlink" title="search()方法"></a>search()方法</h3><p><code>search(pattern, string, flags=0)</code><br>功能：搜索整个字符串，找到第一个匹配结果就返回(我也溜了)，不成功就返回None。返回一个包含匹配信息的对象，可以用<code>group()</code>方法获取值,span()方法获取匹配值在原字符串中的位置。  </p>
 <h3 id="group-方法代码详解"><a href="#group-方法代码详解" class="headerlink" title="group()方法代码详解:"></a>group()方法代码详解:</h3><p>功能：用来提取分组截获的字符串，一个()代表一个分组<br>参数讲解：<br>group()与group(0)等价，都返回完整的内容<br>group(1)获取第1个分组的内容<br>group(2)获取第2个分组的内容<br>group(0,1,2)返回它们获取的内容，统一装入一个元组中<br>groups()返回所有分组匹配的字符，以元组的格式</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line">s = <span class="string">'life is short,i use python, i love python'</span></span><br><span class="line">r = re.search(<span class="string">'life(.*)python(.*)python'</span>,s)</span><br><span class="line">print(r.group())<span class="comment">#life is short,i use python, i love python</span></span><br><span class="line">print(r.group(<span class="number">0</span>))<span class="comment">#life is short,i use python, i love python</span></span><br><span class="line">print(r.group(<span class="number">1</span>))<span class="comment"># is short,i use</span></span><br><span class="line">print(r.group(<span class="number">2</span>))<span class="comment">#, i love</span></span><br><span class="line">print(r.groups())<span class="comment">#(' is short,i use ', ', i love ')</span></span><br></pre></td></tr></table></figure>]]></content>
       <categories>
