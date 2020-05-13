@@ -1,6 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>python中时间、日期、时间戳之间的转换</title>
+    <url>/2020/04/16/python%E4%B8%AD%E6%97%B6%E9%97%B4%E3%80%81%E6%97%A5%E6%9C%9F%E3%80%81%E6%97%B6%E9%97%B4%E6%88%B3%E4%B9%8B%E9%97%B4%E7%9A%84%E8%BD%AC%E6%8D%A2/</url>
+    <content><![CDATA[<h3 id="python中时间、日期、时间戳的转换"><a href="#python中时间、日期、时间戳的转换" class="headerlink" title="python中时间、日期、时间戳的转换"></a>python中时间、日期、时间戳的转换</h3><ul>
+<li>引入模块</li>
+</ul>
+<figure class="highlight xl"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="built_in">time</span>, datetime</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-将str类型时间转换为时间戳"><a href="#1-将str类型时间转换为时间戳" class="headerlink" title="1. 将str类型时间转换为时间戳"></a>1. 将str类型时间转换为时间戳</h4><a id="more"></a>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 字符类型的时间</span></span><br><span class="line">time_str = <span class="string">'2020-01-10 23:40:00'</span></span><br><span class="line"><span class="comment"># 转为时间数组</span></span><br><span class="line">time_tuple = time.strptime(time_str, <span class="string">"%Y-%m-%d %H:%M:%S"</span>)</span><br><span class="line">print(time_tuple)</span><br><span class="line"><span class="comment"># time_tuple可以调用tm_year等</span></span><br><span class="line">print(time_tuple.tm_year)</span><br><span class="line"><span class="comment"># 转为时间戳</span></span><br><span class="line">time_Stamp = int(time.mktime(time_tuple))</span><br><span class="line">print(time_Stamp)</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">time.struct_time(<span class="attribute">tm_year</span>=2020, <span class="attribute">tm_mon</span>=1, <span class="attribute">tm_mday</span>=10, <span class="attribute">tm_hour</span>=23, <span class="attribute">tm_min</span>=40, <span class="attribute">tm_sec</span>=0, <span class="attribute">tm_wday</span>=4, <span class="attribute">tm_yday</span>=10, <span class="attribute">tm_isdst</span>=-1)</span><br><span class="line">2020</span><br><span class="line">1578670800</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-更改str类型日期的显示格式"><a href="#2-更改str类型日期的显示格式" class="headerlink" title="2. 更改str类型日期的显示格式"></a>2. 更改str类型日期的显示格式</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">time_str = <span class="string">"2020-01-10 23:40:00"</span></span><br><span class="line"><span class="comment"># 转为时间元组</span></span><br><span class="line">time_tuple = time.strptime(time_str, <span class="string">"%Y-%m-%d %H:%M:%S"</span>)</span><br><span class="line">print(time_tuple)</span><br><span class="line"><span class="comment"># timeArray可以调用tm_year等</span></span><br><span class="line">print(time_tuple.tm_year)</span><br><span class="line"><span class="comment"># 转为时间戳</span></span><br><span class="line">time_Stamp = int(time.mktime(time_tuple))</span><br><span class="line">print(time_Stamp)</span><br><span class="line"></span><br><span class="line">time_Stamp = int(time.mktime(time.strptime(time_str, <span class="string">"%Y-%m-%d %H:%M:%S"</span>)))</span><br><span class="line">print(time_Stamp)</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">time.struct_time(<span class="attribute">tm_year</span>=2020, <span class="attribute">tm_mon</span>=1, <span class="attribute">tm_mday</span>=10, <span class="attribute">tm_hour</span>=23, <span class="attribute">tm_min</span>=40, <span class="attribute">tm_sec</span>=0, <span class="attribute">tm_wday</span>=4, <span class="attribute">tm_yday</span>=10, <span class="attribute">tm_isdst</span>=-1)</span><br><span class="line">2020</span><br><span class="line">1578670800</span><br><span class="line">1578670800</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-时间戳转换为指定格式的日期"><a href="#3-时间戳转换为指定格式的日期" class="headerlink" title="3. 时间戳转换为指定格式的日期"></a>3. 时间戳转换为指定格式的日期</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用time</span></span><br><span class="line">time_Stamp = <span class="number">1381419600</span></span><br><span class="line">time_tuple = time.localtime(time_Stamp)</span><br><span class="line">other_Style_Time = time.strftime(<span class="string">"%Y--%m--%d %H:%M:%S"</span>, time_tuple)</span><br><span class="line">print(other_Style_Time)   <span class="comment"># 2013--10--10 23:40:00</span></span><br><span class="line"><span class="comment"># 使用datetime</span></span><br><span class="line">time_Stamp = <span class="number">1381419600</span></span><br><span class="line">date = datetime.datetime.fromtimestamp(time_Stamp)</span><br><span class="line">other_Style_Time = date.strftime(<span class="string">"%Y--%m--%d %H:%M:%S"</span>)</span><br><span class="line">print(other_Style_Time)   <span class="comment"># 2013--10--10 23:40:00</span></span><br><span class="line"><span class="comment"># 使用datetime，指定utc时间，相差8小时</span></span><br><span class="line">time_Stamp = <span class="number">1381419600</span></span><br><span class="line">date = datetime.datetime.utcfromtimestamp(time_Stamp)</span><br><span class="line">other_Style_Time = date.strftime(<span class="string">"%Y--%m--%d %H:%M:%S"</span>)</span><br><span class="line">print(other_Style_Time)   <span class="comment"># 2013--10--10 15:40:00</span></span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line"><span class="number">2013</span>-<span class="number">-10</span>-<span class="number">-10</span> <span class="number">23</span>:<span class="number">40</span>:<span class="number">00</span></span><br><span class="line"><span class="number">2013</span>-<span class="number">-10</span>-<span class="number">-10</span> <span class="number">23</span>:<span class="number">40</span>:<span class="number">00</span></span><br><span class="line"><span class="number">2013</span>-<span class="number">-10</span>-<span class="number">-10</span> <span class="number">15</span>:<span class="number">40</span>:<span class="number">00</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-获取当前时间并且用指定格式显示"><a href="#4-获取当前时间并且用指定格式显示" class="headerlink" title="4. 获取当前时间并且用指定格式显示"></a>4. 获取当前时间并且用指定格式显示</h4><ul>
+<li>time获取当前时间戳</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">now = int(time.time()) <span class="comment"># 1587057143</span></span><br><span class="line">time_tuple = time.localtime(now)</span><br><span class="line">print(time_tuple)</span><br><span class="line">other_Style_Time = time.strftime(<span class="string">"%Y--%m--%d %H:%M:%S"</span>, time_tuple)</span><br><span class="line">print(other_Style_Time)</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">time.struct_time(<span class="attribute">tm_year</span>=2020, <span class="attribute">tm_mon</span>=4, <span class="attribute">tm_mday</span>=17, <span class="attribute">tm_hour</span>=1, <span class="attribute">tm_min</span>=14, <span class="attribute">tm_sec</span>=59, <span class="attribute">tm_wday</span>=4, <span class="attribute">tm_yday</span>=108, <span class="attribute">tm_isdst</span>=0)</span><br><span class="line">2020--04--17 01:14:59</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>datetime获取当前时间</li>
+</ul>
+<figure class="highlight perl"><table><tr><td class="code"><pre><span class="line">now = datetime.datetime.now()</span><br><span class="line"><span class="keyword">print</span>(now)</span><br><span class="line">other_Style_Time = now.strftime(<span class="string">"%Y--%m--%d %H:%M:%S"</span>)</span><br><span class="line"><span class="keyword">print</span>(other_Style_Time)</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><span class="line"><span class="number">2020</span><span class="number">-04</span><span class="number">-17</span> <span class="number">01</span>:<span class="number">17</span>:<span class="number">16.541920</span></span><br><span class="line"><span class="number">2020</span>-<span class="number">-04</span>-<span class="number">-17</span> <span class="number">01</span>:<span class="number">17</span>:<span class="number">16</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>pandas之Series</title>
     <url>/2020/04/15/pandas%E4%B9%8BSeries%E5%92%8CDataFrame/</url>
     <content><![CDATA[<h3 id="1-Series"><a href="#1-Series" class="headerlink" title="1.Series"></a>1.Series</h3><p>线性的数据结构, Series是一个一维数组,比列表多了索引的概念</p>
@@ -689,7 +738,7 @@
 </ul>
 <h3 id="概况字符集："><a href="#概况字符集：" class="headerlink" title="概况字符集："></a>概况字符集：</h3><ul>
 <li>\d数字 \D非数字</li>
-<li>\w匹配单词字符，等价于<code>[A-Za-z0-9_]</code>   \W(大写W)相反</li>
+<li>\w匹配单词字符，等价于<code>[A-Za-z0-9_]</code>   \W相反</li>
 <li>\s空白字符 \n \t \r 空格     \S相反</li>
 <li>. 匹配除换行符(\n)之外其他所有字符</li>
 <li>[\u4E00-\u9FA5]汉字的匹配</li>
@@ -698,12 +747,15 @@
 <li>如：<code>[a-z]{3,6}</code></li>
 <li>*表示：匹配0次或无限多次</li>
 <li>+表示：匹配一次或无限多次</li>
-<li>?表示 匹配0次或1次</li>
-<li>{}表示：匹配的次数</li>
-<li>{3,6}表示：匹配3到6次</li>
+<li>?表示：匹配0次或1次</li>
+<li>{m}表示：匹配m次</li>
+<li>{m,}表示：至少m次</li>
+<li>{m,n}表示：匹配3到6次</li>
 </ul>
 <h3 id="贪婪与非贪婪-python默认为贪婪-："><a href="#贪婪与非贪婪-python默认为贪婪-：" class="headerlink" title="贪婪与非贪婪(python默认为贪婪)："></a>贪婪与非贪婪(python默认为贪婪)：</h3><ul>
 <li>非贪婪的表示：[a-z]{3,6}? (注：当?前面的子表达式是一个范围时，则表示为非贪婪)</li>
+<li>贪婪：.*</li>
+<li>非贪婪：.*?</li>
 </ul>
 <h3 id="边界匹配："><a href="#边界匹配：" class="headerlink" title="边界匹配："></a>边界匹配：</h3><ul>
 <li>^表示：从字符串的开始匹配</li>

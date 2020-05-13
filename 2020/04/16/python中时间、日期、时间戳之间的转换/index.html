@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/animals_horse_32%C3%9732.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/animals_horse_16%C3%9716.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-center-circle.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://huihuiya.xyz').hostname,
+    root: '/',
+    scheme: 'Mist',
+    version: '7.7.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"flat"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="python中时间、日期、时间戳的转换 引入模块  1import time, datetime  1. 将str类型时间转换为时间戳">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python中时间、日期、时间戳之间的转换">
+<meta property="og:url" content="http://huihuiya.xyz/2020/04/16/python%E4%B8%AD%E6%97%B6%E9%97%B4%E3%80%81%E6%97%A5%E6%9C%9F%E3%80%81%E6%97%B6%E9%97%B4%E6%88%B3%E4%B9%8B%E9%97%B4%E7%9A%84%E8%BD%AC%E6%8D%A2/index.html">
+<meta property="og:site_name" content="浪天海角">
+<meta property="og:description" content="python中时间、日期、时间戳的转换 引入模块  1import time, datetime  1. 将str类型时间转换为时间戳">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-04-16T06:56:07.000Z">
+<meta property="article:modified_time" content="2020-05-13T11:25:50.413Z">
+<meta property="article:author" content="HuiYa">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://huihuiya.xyz/2020/04/16/python%E4%B8%AD%E6%97%B6%E9%97%B4%E3%80%81%E6%97%A5%E6%9C%9F%E3%80%81%E6%97%B6%E9%97%B4%E6%88%B3%E4%B9%8B%E9%97%B4%E7%9A%84%E8%BD%AC%E6%8D%A2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>python中时间、日期、时间戳之间的转换 | 浪天海角</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">浪天海角</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">学习中···</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="搜索..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://huihuiya.xyz/2020/04/16/python%E4%B8%AD%E6%97%B6%E9%97%B4%E3%80%81%E6%97%A5%E6%9C%9F%E3%80%81%E6%97%B6%E9%97%B4%E6%88%B3%E4%B9%8B%E9%97%B4%E7%9A%84%E8%BD%AC%E6%8D%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/header.jpg">
+      <meta itemprop="name" content="Author">
+      <meta itemprop="description" content="笔记总结！！！">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="浪天海角">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          python中时间、日期、时间戳之间的转换
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-16 14:56:07" itemprop="dateCreated datePublished" datetime="2020-04-16T14:56:07+08:00">2020-04-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-05-13 19:25:50" itemprop="dateModified" datetime="2020-05-13T19:25:50+08:00">2020-05-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="python中时间、日期、时间戳的转换"><a href="#python中时间、日期、时间戳的转换" class="headerlink" title="python中时间、日期、时间戳的转换"></a>python中时间、日期、时间戳的转换</h3><ul>
+<li>引入模块</li>
+</ul>
+<figure class="highlight xl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="built_in">time</span>, datetime</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-将str类型时间转换为时间戳"><a href="#1-将str类型时间转换为时间戳" class="headerlink" title="1. 将str类型时间转换为时间戳"></a>1. 将str类型时间转换为时间戳</h4><a id="more"></a>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 字符类型的时间</span></span><br><span class="line">time_str = <span class="string">'2020-01-10 23:40:00'</span></span><br><span class="line"><span class="comment"># 转为时间数组</span></span><br><span class="line">time_tuple = time.strptime(time_str, <span class="string">"%Y-%m-%d %H:%M:%S"</span>)</span><br><span class="line">print(time_tuple)</span><br><span class="line"><span class="comment"># time_tuple可以调用tm_year等</span></span><br><span class="line">print(time_tuple.tm_year)</span><br><span class="line"><span class="comment"># 转为时间戳</span></span><br><span class="line">time_Stamp = int(time.mktime(time_tuple))</span><br><span class="line">print(time_Stamp)</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">time.struct_time(<span class="attribute">tm_year</span>=2020, <span class="attribute">tm_mon</span>=1, <span class="attribute">tm_mday</span>=10, <span class="attribute">tm_hour</span>=23, <span class="attribute">tm_min</span>=40, <span class="attribute">tm_sec</span>=0, <span class="attribute">tm_wday</span>=4, <span class="attribute">tm_yday</span>=10, <span class="attribute">tm_isdst</span>=-1)</span><br><span class="line">2020</span><br><span class="line">1578670800</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-更改str类型日期的显示格式"><a href="#2-更改str类型日期的显示格式" class="headerlink" title="2. 更改str类型日期的显示格式"></a>2. 更改str类型日期的显示格式</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">time_str = <span class="string">"2020-01-10 23:40:00"</span></span><br><span class="line"><span class="comment"># 转为时间元组</span></span><br><span class="line">time_tuple = time.strptime(time_str, <span class="string">"%Y-%m-%d %H:%M:%S"</span>)</span><br><span class="line">print(time_tuple)</span><br><span class="line"><span class="comment"># timeArray可以调用tm_year等</span></span><br><span class="line">print(time_tuple.tm_year)</span><br><span class="line"><span class="comment"># 转为时间戳</span></span><br><span class="line">time_Stamp = int(time.mktime(time_tuple))</span><br><span class="line">print(time_Stamp)</span><br><span class="line"></span><br><span class="line">time_Stamp = int(time.mktime(time.strptime(time_str, <span class="string">"%Y-%m-%d %H:%M:%S"</span>)))</span><br><span class="line">print(time_Stamp)</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">time.struct_time(<span class="attribute">tm_year</span>=2020, <span class="attribute">tm_mon</span>=1, <span class="attribute">tm_mday</span>=10, <span class="attribute">tm_hour</span>=23, <span class="attribute">tm_min</span>=40, <span class="attribute">tm_sec</span>=0, <span class="attribute">tm_wday</span>=4, <span class="attribute">tm_yday</span>=10, <span class="attribute">tm_isdst</span>=-1)</span><br><span class="line">2020</span><br><span class="line">1578670800</span><br><span class="line">1578670800</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-时间戳转换为指定格式的日期"><a href="#3-时间戳转换为指定格式的日期" class="headerlink" title="3. 时间戳转换为指定格式的日期"></a>3. 时间戳转换为指定格式的日期</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用time</span></span><br><span class="line">time_Stamp = <span class="number">1381419600</span></span><br><span class="line">time_tuple = time.localtime(time_Stamp)</span><br><span class="line">other_Style_Time = time.strftime(<span class="string">"%Y--%m--%d %H:%M:%S"</span>, time_tuple)</span><br><span class="line">print(other_Style_Time)   <span class="comment"># 2013--10--10 23:40:00</span></span><br><span class="line"><span class="comment"># 使用datetime</span></span><br><span class="line">time_Stamp = <span class="number">1381419600</span></span><br><span class="line">date = datetime.datetime.fromtimestamp(time_Stamp)</span><br><span class="line">other_Style_Time = date.strftime(<span class="string">"%Y--%m--%d %H:%M:%S"</span>)</span><br><span class="line">print(other_Style_Time)   <span class="comment"># 2013--10--10 23:40:00</span></span><br><span class="line"><span class="comment"># 使用datetime，指定utc时间，相差8小时</span></span><br><span class="line">time_Stamp = <span class="number">1381419600</span></span><br><span class="line">date = datetime.datetime.utcfromtimestamp(time_Stamp)</span><br><span class="line">other_Style_Time = date.strftime(<span class="string">"%Y--%m--%d %H:%M:%S"</span>)</span><br><span class="line">print(other_Style_Time)   <span class="comment"># 2013--10--10 15:40:00</span></span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2013</span>-<span class="number">-10</span>-<span class="number">-10</span> <span class="number">23</span>:<span class="number">40</span>:<span class="number">00</span></span><br><span class="line"><span class="number">2013</span>-<span class="number">-10</span>-<span class="number">-10</span> <span class="number">23</span>:<span class="number">40</span>:<span class="number">00</span></span><br><span class="line"><span class="number">2013</span>-<span class="number">-10</span>-<span class="number">-10</span> <span class="number">15</span>:<span class="number">40</span>:<span class="number">00</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-获取当前时间并且用指定格式显示"><a href="#4-获取当前时间并且用指定格式显示" class="headerlink" title="4. 获取当前时间并且用指定格式显示"></a>4. 获取当前时间并且用指定格式显示</h4><ul>
+<li>time获取当前时间戳</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">now = int(time.time()) <span class="comment"># 1587057143</span></span><br><span class="line">time_tuple = time.localtime(now)</span><br><span class="line">print(time_tuple)</span><br><span class="line">other_Style_Time = time.strftime(<span class="string">"%Y--%m--%d %H:%M:%S"</span>, time_tuple)</span><br><span class="line">print(other_Style_Time)</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">time.struct_time(<span class="attribute">tm_year</span>=2020, <span class="attribute">tm_mon</span>=4, <span class="attribute">tm_mday</span>=17, <span class="attribute">tm_hour</span>=1, <span class="attribute">tm_min</span>=14, <span class="attribute">tm_sec</span>=59, <span class="attribute">tm_wday</span>=4, <span class="attribute">tm_yday</span>=108, <span class="attribute">tm_isdst</span>=0)</span><br><span class="line">2020--04--17 01:14:59</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>datetime获取当前时间</li>
+</ul>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">now = datetime.datetime.now()</span><br><span class="line"><span class="keyword">print</span>(now)</span><br><span class="line">other_Style_Time = now.strftime(<span class="string">"%Y--%m--%d %H:%M:%S"</span>)</span><br><span class="line"><span class="keyword">print</span>(other_Style_Time)</span><br></pre></td></tr></table></figure>
+
+<p>打印结果：</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2020</span><span class="number">-04</span><span class="number">-17</span> <span class="number">01</span>:<span class="number">17</span>:<span class="number">16.541920</span></span><br><span class="line"><span class="number">2020</span>-<span class="number">-04</span>-<span class="number">-17</span> <span class="number">01</span>:<span class="number">17</span>:<span class="number">16</span></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\04\15\pandas之Series和DataFrame\" rel="bookmark">pandas之Series</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\04\15\pandas之reindex\" rel="bookmark">pandas之reindex</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\03\03\python中json的基本用法\" rel="bookmark">python中json的基本用法</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\03\03\python中的正则表达式\" rel="bookmark">python中的正则表达式</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\03\06\python装饰器与-args-args\" rel="bookmark">python装饰器与*args(**args)</a></div>
+    </li>
+  </ul>
+
+
+<div>
+  
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+  
+</div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"># python</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/15/pandas%E4%B9%8BSeries%E5%92%8CDataFrame/" rel="prev" title="pandas之Series">
+      <i class="fa fa-chevron-left"></i> pandas之Series
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#python中时间、日期、时间戳的转换"><span class="nav-number">1.</span> <span class="nav-text">python中时间、日期、时间戳的转换</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-将str类型时间转换为时间戳"><span class="nav-number">1.1.</span> <span class="nav-text">1. 将str类型时间转换为时间戳</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-更改str类型日期的显示格式"><span class="nav-number">1.2.</span> <span class="nav-text">2. 更改str类型日期的显示格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-时间戳转换为指定格式的日期"><span class="nav-number">1.3.</span> <span class="nav-text">3. 时间戳转换为指定格式的日期</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-获取当前时间并且用指定格式显示"><span class="nav-number">1.4.</span> <span class="nav-text">4. 获取当前时间并且用指定格式显示</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Author"
+      src="/images/header.jpg">
+  <p class="site-author-name" itemprop="name">Author</p>
+  <div class="site-description" itemprop="description">笔记总结！！！</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+  <div class="beian"><a href="http://www.beian.miit.gov.cn/" rel="noopener" target="_blank">黔ICP备20000648号-1 </a>
+      <img src="/images/beian.png" style="display: inline-block;">
+  </div>
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Author</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">21k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">19 分钟</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
+<script type="text/javascript" src="/js/clicklove.js"></script>
+<script type="text/javascript" src="/js/linkcard.js"></script>
+<script type="text/javascript" src="/js/crash_cheat.js"></script>
